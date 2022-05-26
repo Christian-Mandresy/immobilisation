@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="org.apache.tomcat:tomcat-jdbc:10.0.20" type="repository">
+    <properties maven-id="org.apache.tomcat:tomcat-jdbc:10.0.20" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/tomcat-jdbc-10.0.20.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/tomcat-juli-10.0.20.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
