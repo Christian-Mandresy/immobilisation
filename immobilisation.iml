@@ -4,7 +4,7 @@
     <facet type="web" name="Web">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/web/WEB-INF/web.xml" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/webapp/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/web" relative="/" />
@@ -16,7 +16,9 @@
     </facet>
     <facet type="hibernate" name="Hibernate">
       <configuration>
-        <datasource-map />
+        <datasource-map>
+          <unit-entry name="sessionFactory" />
+        </datasource-map>
         <naming-strategy-map />
       </configuration>
     </facet>
@@ -33,5 +35,10 @@
     <orderEntry type="library" name="Hibernate 5.4.11-5.4.11" level="project" />
     <orderEntry type="library" name="org.apache.tomcat:tomcat-jdbc:10.0.20" level="project" />
     <orderEntry type="library" name="org.apache.tomcat:tomcat-dbcp:8.5.5" level="project" />
+    <orderEntry type="library" name="mysql-connector-java-8.0.25" level="project" />
+    <orderEntry type="library" name="jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:1.2.7" level="project" />
+    <orderEntry type="library" name="jsp-api-2.2" level="project" />
+    <orderEntry type="library" name="taglibs-standard-impl-1.2.5" level="project" />
+    <orderEntry type="library" name="org.hibernate.validator:hibernate-validator:7.0.4.Final" level="project" />
   </component>
 </module>
