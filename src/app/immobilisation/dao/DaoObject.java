@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -138,7 +139,29 @@ public class DaoObject{
                 } else {
                 }
             }
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             Criterion newCrit = Restrictions.between(attribut,date1,date2);
+            criteria.add(newCrit);
+            list = criteria.list();
+        } catch (HibernateException ex) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        } finally {
+            session.close();
+        }
+        return list;
+    }
+
+    public List findById(BaseModel baseModel) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+        List list = null;
+
+        try {
+            transaction = session.beginTransaction();
+            Criteria criteria = session.createCriteria(baseModel.getClass());
+            Criterion newCrit = Restrictions.eq("id", baseModel.getId());
             criteria.add(newCrit);
             list = criteria.list();
         } catch (HibernateException ex) {

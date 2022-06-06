@@ -1,11 +1,12 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="java.util.List" %>
+<%@ page import="app.immobilisation.model.*" %>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <!-- Required meta tags -->
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Corona Admin</title>
     <!-- plugins:css -->
@@ -13,8 +14,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/ressources/assets/vendors/css/vendor.bundle.base.css">
     <!-- endinject -->
     <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/ressources/assets/vendors/select2/select2.min.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/ressources/assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <!-- endinject -->
@@ -25,7 +24,7 @@
   </head>
   <body>
     <div class="container-scroller">
-      <!-- partial:partials/_sidebar.html -->
+      <!-- partial:../../partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
           <a class="sidebar-brand brand-logo" href="index.html"><img src="${pageContext.request.contextPath}/ressources/assets/images/logo.svg" alt="logo" /></a>
@@ -109,7 +108,7 @@
             </div>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="pages/forms/basic_elements.html">
+            <a class="nav-link" href="basic_elements.html">
               <span class="menu-icon">
                 <i class="mdi mdi-playlist-play"></i>
               </span>
@@ -117,7 +116,7 @@
             </a>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="basic-table.html">
+            <a class="nav-link" href="../../pages/tables/basic-table.html">
               <span class="menu-icon">
                 <i class="mdi mdi-table-large"></i>
               </span>
@@ -170,7 +169,7 @@
       </nav>
       <!-- partial -->
       <div class="container-fluid page-body-wrapper">
-        <!-- partial:partials/_navbar.html -->
+        <!-- partial:../../partials/_navbar.html -->
         <nav class="navbar p-0 fixed-top d-flex flex-row">
           <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
             <a class="navbar-brand brand-logo-mini" href="index.html"><img src="${pageContext.request.contextPath}/ressources/assets/images/logo-mini.svg" alt="logo" /></a>
@@ -366,62 +365,46 @@
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
-            <div class="page-header">
-              <h3 class="page-title"> Form elements </h3>
-              <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="#">Forms</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Form elements</li>
-                </ol>
-              </nav>
-            </div>
-              <div class="col-12 grid-margin stretch-card">
+            <div class="row">
+              <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Saisie d' immobilier</h4>
-                    <p class="card-description"> Saisie d' immobilier </p>
-                    <sf:form method="POST" modelAttribute="Materiel" action="RechercheMateriel" cssClass="forms-sample">
-                      <div class="form-group">
-                        <label for="exampleInputName1">Nom d'article</label>
-                        <sf:input path="article" cssClass="form-control" id="exampleInput" placeholder="article"/>
-                      </div>
-                      <div class="form-group">
-                        <label for="exampleInputName1">Prix d' achat</label>
-                        <sf:input path="prix_achat" cssClass="form-control" id="exampleInput" placeholder="prix d'achat" type="number"/>
-                      </div>
-                      <div class="form-group">
-                        <label for="exampleSelectGender">Type d' amortissement</label>
-                        <select class="form-control" id="exampleSelectGender" <sf:input path="id_type"/> >
-                            <option value="">Veuiller choisir</option>
-                            <c:forEach items="${requestScope.type}" var="lists">
-                                <option value="${lists.getId()}"> ${lists.getNom()} </option>
-                            </c:forEach>
-                        </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="exampleInputName1">Duree</label>
-                        <sf:input path="duree" cssClass="form-control" placeholder="duree" type="number"/>
-                      </div>
-                      <h3>Entrer une intervalle de date</h3>
-                      <div class="form-group">
-                        <label for="date 1">Date de debut </label>
-                        <input type="date" class="form-control" placeholder="date debut" name="date1" value="">
-                      </div>
-                      <div class="form-group">
-                        <label for="date 2">Date de fin</label>
-                        <input type="date" class="form-control" placeholder="date debut" name="date2" value="">
-                      </div>
-                      <button type="submit" class="btn btn-primary me-2">Rechercher</button>
-                    </sf:form>
-                    <div style="color: red"> <c:out value="${ error }"></c:out> </div>
-                    <div style="color: green"> <c:out value="${ success }"></c:out> </div>
+                    <h4 class="card-title">List des Materiaux</h4>
+                    </p>
+                    <div class="table-responsive">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th> Année </th>
+                            <th> Prix d'achat </th>
+                            <th> Antérieur </th>
+                            <th> Exercice </th>
+                            <th> Cumul </th>
+                            <th> Valeur net comptable </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach items="${requestScope.tableau}" var="lists">
+                          <tr>
+                            <td> ${lists.getAnnee()} </td>
+                            <td> ${lists.getPA()} </td>
+                            <td> ${lists.getAnterieur()} </td>
+                            <td> ${lists.getExercice()} </td>
+                            <td> ${lists.getCumul()} </td>
+                            <td> ${lists.getVNC()} </td>
+                          </tr>
+                        </c:forEach>
+                        </tbody>
+                      </table>
+                    </div>
+                      <p style="">la somme des achats : ${requestScope.somme} ar</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <!-- content-wrapper ends -->
-          <!-- partial:partials/_footer.html -->
+          <!-- partial:../../partials/_footer.html -->
           <footer class="footer">
             <div class="d-sm-flex justify-content-center justify-content-sm-between">
               <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2021</span>
@@ -439,8 +422,6 @@
     <script src="${pageContext.request.contextPath}/ressources/assets/vendors/js/vendor.bundle.base.js"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->
-    <script src="${pageContext.request.contextPath}/ressources/assets/vendors/select2/select2.min.js"></script>
-    <script src="${pageContext.request.contextPath}/ressources/assets/vendors/typeahead.js/typeahead.bundle.min.js"></script>
     <!-- End plugin js for this page -->
     <!-- inject:js -->
     <script src="${pageContext.request.contextPath}/ressources/assets/js/off-canvas.js"></script>
@@ -450,9 +431,6 @@
     <script src="${pageContext.request.contextPath}/ressources/assets/js/todolist.js"></script>
     <!-- endinject -->
     <!-- Custom js for this page -->
-    <script src="${pageContext.request.contextPath}/ressources/assets/js/file-upload.js"></script>
-    <script src="${pageContext.request.contextPath}/ressources/assets/js/typeahead.js"></script>
-    <script src="${pageContext.request.contextPath}/ressources/assets/js/select2.js"></script>
     <!-- End custom js for this page -->
   </body>
 </html>
