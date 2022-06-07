@@ -15,7 +15,9 @@ public interface ModelService {
 
     List find(BaseModel baseModel) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
 
-    List finBetween(BaseModel baseModel, String attr, Date date1, Date date2) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
+    List finBetween(BaseModel baseModel, String attr, Date date1, Date date2, int debut, int max) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
 
     List findById(BaseModel baseModel) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
+
+    int countFind(BaseModel baseModel, String attr, Date date1, Date date2) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
 }

@@ -2,6 +2,7 @@ package app.immobilisation.dao;
 import app.immobilisation.model.BaseModel;
 import org.hibernate.*;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -123,10 +124,42 @@ public class DaoObject{
         return list;
     }
 
-    public List findBetween(BaseModel baseModel, String attribut, Date date1, Date date2) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public List findBetween(BaseModel baseModel, String attribut, Date date1, Date date2,int first,int max) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         Session session = sessionFactory.openSession();
         Transaction transaction = null;
         List list = null;
+        Field[] field = baseModel.getClass().getDeclaredFields();
+        Object obj = null;
+        try {
+            Criteria criteria = session.createCriteria(baseModel.getClass());
+            criteria.setFirstResult(first);
+            criteria.setMaxResults(max);
+            for (Field field1 : field) {
+                obj = baseModel.getClass().getMethod("get" + toUper(field1.getName())).invoke(baseModel);
+                if (obj != null) {
+                    Criterion newCrit = Restrictions.eq(field1.getName(), obj);
+                    criteria.add(newCrit);
+                } else {
+                }
+            }
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Criterion newCrit = Restrictions.between(attribut,date1,date2);
+            criteria.add(newCrit);
+            list = criteria.list();
+        } catch (HibernateException ex) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        } finally {
+            session.close();
+        }
+        return list;
+    }
+
+    public int CountRecherche(BaseModel baseModel, String attribut, Date date1, Date date2) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+        int list = 0;
         Field[] field = baseModel.getClass().getDeclaredFields();
         Object obj = null;
         try {
@@ -142,7 +175,8 @@ public class DaoObject{
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             Criterion newCrit = Restrictions.between(attribut,date1,date2);
             criteria.add(newCrit);
-            list = criteria.list();
+            int totalResult = ((Number)criteria.setProjection(Projections.rowCount()).uniqueResult()).intValue();
+            return totalResult;
         } catch (HibernateException ex) {
             if (transaction != null) {
                 transaction.rollback();

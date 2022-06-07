@@ -92,49 +92,106 @@ public class MaterielController {
         }
     }
 
-    @RequestMapping(value = "/RechercheMateriel",method = RequestMethod.POST)
+    @RequestMapping(value = "/RechercheMateriel")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     public String RechercheMateriel(@ModelAttribute("Materiel") @Validated Materiel materiel,
                                  BindingResult bindingResult, Model model, HttpServletRequest request)
     {
 
         Materiel Materiel=new Materiel();
-        if (request.getParameter("article").equals(""))
+        if(request.getParameter("pagin")!=null)
         {
-            Materiel.setArticle(null);
-        }
-        else {
-            Materiel.setArticle(request.getParameter("article"));
-        }
-        if(request.getParameter("duree").equals(""))
-        {
-            Materiel.setDuree(null);
+            String critere=request.getParameter("critere");
+            String[] list=critere.split(",");
+            for (int i = 0; i <list.length ; i++) {
+                if (list[i].equals(""))
+                {
+                    Materiel.setArticle(null);
+                }
+                else {
+                    Materiel.setArticle(list[i]);
+                }
+                if(list[i].equals(""))
+                {
+                    Materiel.setDuree(null);
+                }
+                else
+                {
+                    Materiel.setDuree(Integer.parseInt(list[i]));
+                }
+                if(list[i].equals(""))
+                {
+                    Materiel.setPrix_achat(null);
+                }
+                else {
+                    Materiel.setPrix_achat(Float.parseFloat(list[i]));
+                }
+                if(list[i].equals(""))
+                {
+                    Materiel.setId_type(null);
+                }
+                else{
+                    Materiel.setId_type(Integer.parseInt(list[i]));
+                }
+            }
         }
         else
         {
-            Materiel.setDuree(Integer.parseInt(request.getParameter("duree")));
+            if (request.getParameter("article").equals(""))
+            {
+                Materiel.setArticle(null);
+            }
+            else {
+                Materiel.setArticle(request.getParameter("article"));
+            }
+            if(request.getParameter("duree").equals(""))
+            {
+                Materiel.setDuree(null);
+            }
+            else
+            {
+                Materiel.setDuree(Integer.parseInt(request.getParameter("duree")));
+            }
+            if(request.getParameter("prix_achat").equals(""))
+            {
+                Materiel.setPrix_achat(null);
+            }
+            else {
+                Materiel.setPrix_achat(Float.parseFloat(request.getParameter("prix_achat")));
+            }
+            if(request.getParameter("id_type").equals(""))
+            {
+                Materiel.setId_type(null);
+            }
+            else{
+                Materiel.setId_type(Integer.parseInt(request.getParameter("id_type")));
+            }
         }
-        if(request.getParameter("prix_achat").equals(""))
-        {
-            Materiel.setPrix_achat(null);
-        }
-        else {
-            Materiel.setPrix_achat(Float.parseFloat(request.getParameter("prix_achat")));
-        }
-        if(request.getParameter("id_type").equals(""))
-        {
-            Materiel.setId_type(null);
-        }
-        else{
-            Materiel.setId_type(Integer.parseInt(request.getParameter("id_type")));
-        }
-
 
         Date date1=null;
         Date date2=null;
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        String strdate1=request.getParameter("date1");
-        String strdate2=request.getParameter("date2");
+        String strdate1="";
+        String strdate2="";
+        if(request.getParameter("pagin")!=null)
+        {
+            String critere=request.getParameter("critere");
+            String[] list=critere.split(",");
+            if(list.length<5)
+            {
+
+            }
+            else
+            {
+                strdate1=list[5];
+                strdate2=list[6];
+            }
+        }
+        else
+        {
+            strdate1=request.getParameter("date1");
+            strdate2=request.getParameter("date2");
+        }
         if(strdate1.equals("")==true)
         {
             try {
@@ -153,9 +210,24 @@ public class MaterielController {
                 e.printStackTrace();
             }
         }
-        try {
 
-            List val=modelService.finBetween(Materiel,"date_achat",date1,date2);
+        try {
+            String critera="";
+            int debut=1;
+            if(request.getParameter("pagin")!=null)
+            {
+                debut=Integer.parseInt(request.getParameter("debut"));
+                critera=request.getParameter("critere");
+                if(debut>1)
+                {
+                    debut = (debut-1)*10 ;
+                }
+            }
+            else
+            {
+                critera=request.getParameter("article")+","+request.getParameter("duree")+","+request.getParameter("prix_achat")+","+request.getParameter("id_type")+","+strdate1+","+strdate2;
+            }
+            List val=modelService.finBetween(Materiel,"date_achat",date1,date2,debut,10);
             float somme=0;
             for(int i=0;i<val.size();i++)
             {
@@ -164,6 +236,8 @@ public class MaterielController {
             }
             model.addAttribute("listMateriaux",val);
             model.addAttribute("somme",somme);
+            model.addAttribute("critere",critera);
+            model.addAttribute("count",(int)modelService.countFind(Materiel,"date_achat",date1,date2)/10);
             return "ListMateriaux";
         }catch (Exception e)
         {
