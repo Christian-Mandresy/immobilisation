@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -166,31 +169,46 @@ public class Materiel extends BaseModel {
             int mois=12-nombremois;
             double n =(double)(nombremois/12.0d);
             prorata1= (double) ((double)this.prix_achat * (double)taux * (double)n);
-            prorata2= (double) ((double)this.prix_achat * (double)taux * (double)(mois/12.0d));
+            prorata2= (double) ((double)this.prix_achat *  (double)taux * (double)(mois/12.0d) );
         }
-        val[0].setAnnee(this.getDate_service().getYear());
+
+
+
+        val[0].setAnnee(this.getDate_service().getYear()+1900);
         val[0].setPA(this.getPrix_achat());
         val[0].setAnterieur(0);
         if(this.getDate_service().getMonth()!=0)
         {
-            val[0].setExercice(prorata1);
+            BigDecimal salary = new BigDecimal(prorata1);
+            BigDecimal salary2 = salary.setScale(2, RoundingMode.HALF_EVEN);
+            val[0].setExercice(salary2.doubleValue());
         }
         else
         {
             val[0].setExercice(exercice);
         }
-        val[0].setCumul(val[0].getExercice());
-        val[0].setVNC(val[0].getPA()-val[0].getCumul());
+        BigDecimal cumul = new BigDecimal(val[0].getExercice());
+        BigDecimal cumul2 = cumul.setScale(2, RoundingMode.HALF_EVEN);
+        val[0].setCumul(cumul2.doubleValue());
+
+        BigDecimal vnc = new BigDecimal(val[0].getPA()-val[0].getCumul());
+        BigDecimal vnc2 = vnc.setScale(2, RoundingMode.HALF_EVEN);
+        val[0].setVNC(vnc2.doubleValue());
 
         for (int i = 1; i <val.length ; i++) {
             val[i].setAnnee(val[i-1].getAnnee()+1);
             val[i].setPA(this.getPrix_achat());
-            val[i].setAnterieur(val[i-1].getCumul());
-            val[i].setCumul(val[i].getAnterieur()+exercice);
-            val[i].setVNC(this.prix_achat-val[i].getCumul());
+
+            BigDecimal ant = new BigDecimal(val[i-1].getCumul());
+            BigDecimal ant2 = ant.setScale(2, RoundingMode.HALF_EVEN);
+            val[i].setAnterieur(ant2.doubleValue() );
+
             if(i==val.length-1 && prorat==true)
             {
-                val[i].setExercice(prorata2);
+
+                BigDecimal salary = new BigDecimal(prorata2);
+                BigDecimal salary2 = salary.setScale(2, RoundingMode.HALF_UP);
+                val[i].setExercice(salary2.doubleValue());
             }
             else if(i==val.length-1 && prorat==false)
             {
@@ -200,6 +218,26 @@ public class Materiel extends BaseModel {
             {
                 val[i].setExercice(exercice);
             }
+
+            BigDecimal cumul3 = new BigDecimal(val[i].getAnterieur()+val[i].getExercice());
+            BigDecimal cumul4 = null;
+            if(i==val.length-1 && prorat==true)
+            {
+                val[i].setCumul(this.prix_achat);
+                val[i].setVNC(0);
+            }
+            else
+            {
+                cumul4 = cumul3.setScale(2, RoundingMode.HALF_EVEN);
+                val[i].setCumul(cumul4.doubleValue());
+                BigDecimal vnc3 = new BigDecimal(this.prix_achat-val[i].getCumul());
+                BigDecimal vnc4 = vnc3.setScale(2, RoundingMode.HALF_UP);
+                val[i].setVNC(vnc4.doubleValue());
+            }
+
+
+
+
         }
         return val;
     }

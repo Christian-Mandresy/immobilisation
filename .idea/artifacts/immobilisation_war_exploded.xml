@@ -16,6 +16,7 @@
           <element id="library" level="project" name="jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:1.2.7" />
           <element id="library" level="project" name="taglibs-standard-impl-1.2.5" />
           <element id="library" level="project" name="jsp-api-2.2" />
+          <element id="library" level="project" name="org.hibernate.validator:hibernate-validator:7.0.4.Final" />
         </element>
       </element>
       <element id="dir-copy" path="$PROJECT_DIR$/webapp" />
