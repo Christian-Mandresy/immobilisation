@@ -350,10 +350,10 @@
 
                     <div class="btn-group" role="group" aria-label="Basic example">
                       <c:forEach var="i" begin="1" end="${requestScope.count}" step="1">
-                        <button type="button" class="btn btn-outline-secondary"><a href="RechercheMateriel?pagin=true&critere=${requestScope.critere}&debut=${ i }"><c:out value="${ i }" /></a> </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="window.location.href='RechercheMateriel?pagin=true&critere=${requestScope.critere}&debut=${ i }'"><c:out value="${ i }" /> </button>
                       </c:forEach>
                     </div>
-                    <button type="button" class="btn btn-outline-secondary"><a href="export?critere=${requestScope.critere}&debut=${requestScope.debut}">exporter pdf</a> </button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="window.location.href='export?critere=${requestScope.critere}&debut=${requestScope.debut}'">exporter pdf</button>
                   </div>
                 </div>
               </div>
