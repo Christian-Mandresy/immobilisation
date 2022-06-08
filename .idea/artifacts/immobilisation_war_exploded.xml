@@ -17,6 +17,7 @@
           <element id="library" level="project" name="taglibs-standard-impl-1.2.5" />
           <element id="library" level="project" name="jsp-api-2.2" />
           <element id="library" level="project" name="org.hibernate.validator:hibernate-validator:7.0.4.Final" />
+          <element id="library" level="project" name="openpdf-1.3.26" />
         </element>
       </element>
       <element id="dir-copy" path="$PROJECT_DIR$/webapp" />

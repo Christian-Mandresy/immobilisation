@@ -410,6 +410,7 @@
                         <button type="button" class="btn btn-outline-secondary"><a href="RechercheMateriel?pagin=true&critere=${requestScope.critere}&debut=${ i }"><c:out value="${ i }" /></a> </button>
                       </c:forEach>
                     </div>
+                    <button type="button" class="btn btn-outline-secondary"><a href="export?critere=${requestScope.critere}&debut=${requestScope.debut}">exporter pdf</a> </button>
                   </div>
                 </div>
               </div>
