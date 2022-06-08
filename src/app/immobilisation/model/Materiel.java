@@ -194,6 +194,9 @@ public class Materiel extends BaseModel {
         BigDecimal vnc2 = vnc.setScale(2, RoundingMode.HALF_EVEN);
         val[0].setVNC(vnc2.doubleValue());
 
+        val[0].setArticle(this.article);
+        val[0].setDate_service(this.date_service);
+
         for (int i = 1; i <val.length ; i++) {
             val[i].setAnnee(val[i-1].getAnnee()+1);
             val[i].setPA(this.getPrix_achat());
@@ -234,10 +237,23 @@ public class Materiel extends BaseModel {
                 val[i].setVNC(vnc4.doubleValue());
             }
 
-
+            val[i].setArticle(this.article);
+            val[i].setDate_service(this.date_service);
 
 
         }
         return val;
+    }
+
+    public TableauAmortissement Amortissement(int annee)
+    {
+        TableauAmortissement[] table=tableauAmortissements();
+        for (int i = 0; i <table.length ; i++) {
+            if(table[i].getAnnee()==annee)
+            {
+                return table[i];
+            }
+        }
+        return new TableauAmortissement();
     }
 }

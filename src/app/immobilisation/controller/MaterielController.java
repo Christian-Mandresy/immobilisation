@@ -51,6 +51,12 @@ public class MaterielController {
         return "Recherche";
     }
 
+    @RequestMapping(value = "/formAnnee")
+    public String FormAnnee()
+    {
+        return "Annee";
+    }
+
     @RequestMapping(value = "/AjoutMateriel",method = RequestMethod.POST)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     public String InsertMateriel(@ModelAttribute("Materiel") @Validated Materiel materiel,
@@ -379,6 +385,35 @@ public class MaterielController {
             e.printStackTrace();
         }
 
+    }
+
+    @RequestMapping(value = "/Annee")
+    public String AmortAnnee(Map<String, Object> modelMap,HttpServletRequest request)
+    {
+        Materiel materiel=new Materiel();
+        List<Materiel> val=null;
+        int annee=Integer.parseInt(request.getParameter("annee"));
+
+        val=modelService.findall(materiel);
+        TableauAmortissement[] valiny=new TableauAmortissement[val.size()];
+        int indice=0;
+        for (int i = 0; i <val.size() ; i++) {
+            Materiel mater=(Materiel)val.get(i);
+            TableauAmortissement mat=mater.Amortissement(annee);
+            if(mat.getAnnee()==0)
+            {
+
+            }
+            else
+            {
+                valiny[indice]=mat;
+                indice++;
+            }
+        }
+
+
+        modelMap.put("tableau",valiny);
+        return "TableauAmort";
     }
 
 

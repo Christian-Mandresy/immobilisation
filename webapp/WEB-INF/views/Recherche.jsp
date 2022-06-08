@@ -108,6 +108,14 @@
               <span class="menu-title">Tableau d'amortissement</span>
             </a>
           </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="formAnnee">
+              <span class="menu-icon">
+                <i class="mdi mdi-playlist-play"></i>
+              </span>
+              <span class="menu-title">Amortissement annuel</span>
+            </a>
+          </li>
 
         </ul>
       </nav>

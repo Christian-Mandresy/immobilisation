@@ -1,5 +1,7 @@
 package app.immobilisation.model;
 
+import java.util.Date;
+
 public class TableauAmortissement {
     private int Annee;
     private double PA;
@@ -7,6 +9,24 @@ public class TableauAmortissement {
     private double Exercice;
     private double Cumul;
     private double VNC;
+    private String article;
+    private Date date_service;
+
+    public String getArticle() {
+        return article;
+    }
+
+    public void setArticle(String article) {
+        this.article = article;
+    }
+
+    public Date getDate_service() {
+        return date_service;
+    }
+
+    public void setDate_service(Date date_service) {
+        this.date_service = date_service;
+    }
 
     public int getAnnee() {
         return Annee;
