@@ -93,12 +93,11 @@
             </a>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" data-bs-toggle="collapse" href="formRecherche" aria-expanded="false" aria-controls="ui-basic">
+            <a class="nav-link" href="formRecherche">
               <span class="menu-icon">
-                <i class="mdi mdi-laptop"></i>
+                <i class="mdi mdi-speedometer"></i>
               </span>
               <span class="menu-title">Rechercher</span>
-              <i class="menu-arrow"></i>
             </a>
           </li>
           <li class="nav-item menu-items">
